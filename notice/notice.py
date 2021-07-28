@@ -6,22 +6,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-noticesURL = os.environ.get('NOTICE_URL', 'lal')
-eventsURL = os.environ.get('EVENT_URL', 'lal')
+baseURL = os.environ.get('BASE_URL', '')
+noticesURL = os.environ.get('NOTICE_URL', '')
+eventsURL = os.environ.get('EVENT_URL', '')
 
 notice = Blueprint('notice', __name__)
 
 
 # Shut down the scheduler when exiting the app
 # atexit.register(lambda: scheduler.shutdown())
+# http://127.0.0.1:5000/ bubt/v1/allNotice?sl=0&&el=520 page=3&per_page=100
 
 
-def getAllNE(dType, startLimit, endLimit):
-    # scheduler = BackgroundScheduler()
-    # scheduler.add_job(func=print_date_time(), trigger="interval", seconds=15)
-    # scheduler.start()
-
-    # sendPush()
+def getAllNE(dType, page, limit):
     finalData = {
         'data': list()
     }
@@ -30,13 +27,20 @@ def getAllNE(dType, startLimit, endLimit):
         NE_HTML = get(url).text
         NE_HTML = BeautifulSoup(str(NE_HTML), 'html.parser').find_all('table')[0]
         rows = BeautifulSoup(str(NE_HTML), 'html.parser').find_all('tr')[1:]
-        for row in rows[int(startLimit): int(endLimit)]:
+
+        items = len(rows)
+
+        start = page * limit
+        end = page * limit + limit
+
+        if start > items:
+            start = items
+        if end > items:
+            end = items
+
+        for row in rows[int(start): int(end)]:
             cols = row.find_all('td')
-
             details = getDetails(cols[0].a['href'].strip())
-
-            print(details)
-
             localData = {
                 'title': cols[0].text.strip(),
                 'published_on': cols[2 if dType == 'notice' else 1].text.strip(),
@@ -47,10 +51,7 @@ def getAllNE(dType, startLimit, endLimit):
                 localData['category'] = cols[1].text.strip()
             else:
                 localData['category'] = "Event"
-
             finalData['data'].append(localData)
-        print(len(rows))
-
         finalData['status'] = 'success'
     except Exception as e:
         finalData = {'status': 'failed', 'reason': str(e)}
@@ -65,15 +66,12 @@ def getDetails(url):
     try:
         noticeHTML = get(url).text
         noticeHTML = BeautifulSoup(str(noticeHTML), 'html.parser').find('div', {'class': 'devs_history_body'})
-        baseURL = 'https://www.bubt.edu.bd'
-
         finalData['data'] = {
             'description': noticeHTML.find('div', {'class': 'event-details'}).text.strip(),
             'images': baseURL + noticeHTML.find_all('img')[0]['src'],
         }
         if len(finalData['data']['images']) == 0:
             finalData['data']['images'].append({'url': ''})
-
     except Exception as e:
         print(e)
         finalData['data'] = {'description': 'none', 'images': ''}
@@ -84,11 +82,13 @@ def getDetails(url):
 @notice.route('/bubt/v1/<dataType>', methods=['GET'])
 def dataBUBT(dataType):
     print(request.args)
-    if dataType in ['allNotice', 'noticeDetails', 'allEvent', 'eventDetails', 'getResult']:
+    if dataType in ['allNotice', 'noticeDetails', 'allEvent', 'eventDetails']:
         if dataType == 'allNotice':
-            data = getAllNE(dType='notice', startLimit=request.args.get('sl'), endLimit=request.args.get('el'))
+            data = getAllNE(dType='notice', page=int(request.args.get('page')), limit=int(request.args.get('limit')))
+
         elif dataType == 'allEvent':
-            data = getAllNE(dType='event', startLimit=request.args.get('sl'), endLimit=request.args.get('el'))
+            data = getAllNE(dType='event', page=int(request.args.get('page')), limit=int(request.args.get('limit')))
+
         elif dataType == 'noticeDetails' or dataType == 'eventDetails':
             url = request.args.get('url')
             if url is not None:

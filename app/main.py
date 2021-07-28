@@ -1,8 +1,9 @@
 import os
 import sys
-
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from notice.notice import notice
+from fcm.fcm import prepareData
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -11,7 +12,13 @@ sys.path.insert(0, os.getcwd() + '/apis')
 
 
 def do_something():
-    print('MyFlaskApp is starting up! ' + os.environ.get('NOTICE_URL', 'lal'))
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=prepareData, trigger="interval", seconds=15)
+    scheduler.start()
+    # x = "lal"
+    # val = x if not x else None
+    # print(val)
+    # print('MyFlaskApp is starting up! ' + os.environ.get('NOTICE_URL', 'lal'))
 
 
 class MyFlaskApp(Flask):

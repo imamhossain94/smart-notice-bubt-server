@@ -1,13 +1,13 @@
 import json
 import time
 import requests
-from apscheduler.schedulers.background import BackgroundScheduler
-from bs4 import BeautifulSoup
-from flask import Blueprint, request, jsonify
-from requests import get
+import os.path
+from notice.notice import *
 
-serverToken = ''
-deviceToken = ''
+noticeFile = 'latestNotice.json'
+eventFile = 'latestEvent.json'
+serverToken = os.environ.get('FCM_SERVER_TOKEN', '')
+deviceToken = os.environ.get('FCM_DEVICE_TOKEN', '')
 
 headers = {
     'Content-Type': 'application/json',
@@ -15,23 +15,55 @@ headers = {
 }
 
 
-def sendPush(time):
+def sendPushNotification(nType, data):
+    imageUrl = data['data'][0]['details']['images']
+
+    notification = {
+        'title': data['data'][0]['category'],
+        'body': data['data'][0]['title'],
+    } if not imageUrl else {
+        'title': data['data'][0]['category'],
+        'body': data['data'][0]['title'],
+        'image': imageUrl
+    }
+
     body = {
-        'notification': {'title': 'Sending push form python script',
-                         'body': 'New Message' + time
-                         },
-        'to':
-            deviceToken,
+        'notification': notification,
+        'to': deviceToken,
         'priority': 'high',
-        #   'data': dataPayLoad,
+        'data': data['data'][0]
     }
     response = requests.post("https://fcm.googleapis.com/fcm/send", headers=headers, data=json.dumps(body))
-    print(response.status_code)
 
+    with open(noticeFile if nType == 'notice' else eventFile, 'w+') as f:
+        f.write(json.dumps(data))
+
+    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+    print(response.status_code)
     print(response.json())
 
 
-def print_date_time(lal):
-    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-    sendPush(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+def localData(objData, filename):
+    file_exists = os.path.exists(filename)
+    if file_exists:
+        with open(filename, 'r') as f:
+            data = json.loads(f.read())
+    else:
+        data = {}
+    return True if objData != data else False
+
+
+def prepareData():
+    noticeData = getAllNE(dType='notice', page=0, limit=1)
+
+    if localData(objData=noticeData, filename=noticeFile):
+        sendPushNotification(nType='notice', data=noticeData)
+    else:
+        print("No New Notification")
+
+    eventData = getAllNE(dType='event', page=0, limit=1)
+    if localData(objData=eventData, filename=eventFile):
+        sendPushNotification(nType='event', data=eventData)
+    else:
+        print("No New Event")
 
