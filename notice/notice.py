@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from flask import Blueprint, request, jsonify
 from requests import get
 from dotenv import load_dotenv
+
 load_dotenv()
 
 noticesURL = os.environ.get('NOTICE_URL', 'lal')
@@ -11,13 +12,11 @@ eventsURL = os.environ.get('EVENT_URL', 'lal')
 notice = Blueprint('notice', __name__)
 
 
-
 # Shut down the scheduler when exiting the app
-#atexit.register(lambda: scheduler.shutdown())
+# atexit.register(lambda: scheduler.shutdown())
 
 
 def getAllNE(dType, startLimit, endLimit):
-
     # scheduler = BackgroundScheduler()
     # scheduler.add_job(func=print_date_time(), trigger="interval", seconds=15)
     # scheduler.start()
@@ -51,8 +50,7 @@ def getAllNE(dType, startLimit, endLimit):
 
             finalData['data'].append(localData)
         print(len(rows))
-        with open('test.html', 'w', encoding='utf-8') as f:
-            f.write(str(NE_HTML))
+
         finalData['status'] = 'success'
     except Exception as e:
         finalData = {'status': 'failed', 'reason': str(e)}
