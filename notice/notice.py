@@ -66,12 +66,17 @@ def getDetails(url):
     try:
         noticeHTML = get(url).text
         noticeHTML = BeautifulSoup(str(noticeHTML), 'html.parser').find('div', {'class': 'devs_history_body'})
+        images = noticeHTML.find_all('img')
+        if len(images) != 0:
+            imageUrl = baseURL + images[0]['src']
+        else:
+            imageUrl = ''
+
         finalData['data'] = {
             'description': noticeHTML.find('div', {'class': 'event-details'}).text.strip(),
-            'images': baseURL + noticeHTML.find_all('img')[0]['src'],
+            'images': imageUrl
         }
-        if len(finalData['data']['images']) == 0:
-            finalData['data']['images'].append({'url': ''})
+
     except Exception as e:
         print(e)
         finalData['data'] = {'description': 'none', 'images': ''}

@@ -8,6 +8,7 @@ noticeFile = 'latestNotice.json'
 eventFile = 'latestEvent.json'
 serverToken = os.environ.get('FCM_SERVER_TOKEN', '')
 deviceToken = os.environ.get('FCM_DEVICE_TOKEN', '')
+topic = os.environ.get('FCM_TOPIC', '')
 
 headers = {
     'Content-Type': 'application/json',
@@ -19,17 +20,17 @@ def sendPushNotification(nType, data):
     imageUrl = data['data'][0]['details']['images']
 
     notification = {
-        'title': data['data'][0]['category'],
-        'body': data['data'][0]['title'],
+        'title': data['data'][0]['title'],
+        'body': data['data'][0]['published_on'],
     } if not imageUrl else {
-        'title': data['data'][0]['category'],
-        'body': data['data'][0]['title'],
+        'title': data['data'][0]['title'],
+        'body': data['data'][0]['published_on'],
         'image': imageUrl
     }
 
     body = {
         'notification': notification,
-        'to': deviceToken,
+        'to': deviceToken, # topic
         'priority': 'high',
         'data': data['data'][0]
     }

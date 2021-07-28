@@ -13,12 +13,8 @@ sys.path.insert(0, os.getcwd() + '/apis')
 
 def do_something():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=prepareData, trigger="interval", seconds=15)
+    scheduler.add_job(func=prepareData, trigger="interval", minutes=30)
     scheduler.start()
-    # x = "lal"
-    # val = x if not x else None
-    # print(val)
-    # print('MyFlaskApp is starting up! ' + os.environ.get('NOTICE_URL', 'lal'))
 
 
 class MyFlaskApp(Flask):
@@ -37,5 +33,3 @@ app.register_blueprint(notice)
 @app.route('/')
 def welcome():
     return '<h1 align="center">Successfully Running</h1>'
-
-# app.run()
