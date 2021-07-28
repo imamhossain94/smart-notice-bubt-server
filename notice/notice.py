@@ -1,46 +1,14 @@
-import requests
-import json
+import os
+from bs4 import BeautifulSoup
 from flask import Blueprint, request, jsonify
 from requests import get
-from bs4 import BeautifulSoup
-import time
-import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
+from dotenv import load_dotenv
+load_dotenv()
 
-noticesURL = 'https://www.bubt.edu.bd/Home/all_notice'
-eventsURL = 'https://www.bubt.edu.bd/Home/all_events'
+noticesURL = os.environ.get('NOTICE_URL', 'lal')
+eventsURL = os.environ.get('EVENT_URL', 'lal')
 
 notice = Blueprint('notice', __name__)
-
-serverToken = 'AAAAjV2cByw:APA91bGCd0_RV42uuWKKj8XmvWmyr3wxnULoeyM65Lylq1DH5Chnwivos0uoUrSaD-IFZnlPm8tVjGmkqActfRbGVPtLJNy9Iet0A9g9X07wCMlWfEsSOQUsjzpM3MuOJ-FZhXMEP_NQ'
-deviceToken = 'e0UA1vsf0g0:APA91bHeApYMcS00x6iCwutr7AQfq5NXX1w5h-MlT9BAaLo2U1d2FFxG4ySp05OVywaahexhEMm28Xf7KxxgxN8IzCRI2AvOc3oCWFpE8fRlhixdDbr9IB4BRmEHj0hw_RGWvrAbVoKF'
-
-headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'key=' + serverToken,
-}
-
-
-def sendPush(time):
-    body = {
-        'notification': {'title': 'Sending push form python script',
-                         'body': 'New Message' + time
-                         },
-        'to':
-            deviceToken,
-        'priority': 'high',
-        #   'data': dataPayLoad,
-    }
-    response = requests.post("https://fcm.googleapis.com/fcm/send", headers=headers, data=json.dumps(body))
-    print(response.status_code)
-
-    print(response.json())
-
-
-def print_date_time():
-    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-    sendPush(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-
 
 
 
@@ -49,9 +17,11 @@ def print_date_time():
 
 
 def getAllNE(dType, startLimit, endLimit):
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=print_date_time, trigger="interval", seconds=15)
-    scheduler.start()
+
+    # scheduler = BackgroundScheduler()
+    # scheduler.add_job(func=print_date_time(), trigger="interval", seconds=15)
+    # scheduler.start()
+
     # sendPush()
     finalData = {
         'data': list()

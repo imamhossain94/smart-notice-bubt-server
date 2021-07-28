@@ -3,11 +3,26 @@ import sys
 
 from flask import Flask
 from notice.notice import notice
+from dotenv import load_dotenv
+load_dotenv()
 
 # For Server
 sys.path.insert(0, os.getcwd() + '/apis')
 
-app = Flask(__name__)
+
+def do_something():
+    print('MyFlaskApp is starting up! ' + os.environ.get('NOTICE_URL', 'lal'))
+
+
+class MyFlaskApp(Flask):
+    def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
+        if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
+            with self.app_context():
+                do_something()
+        super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
+
+
+app = MyFlaskApp(__name__)
 
 app.register_blueprint(notice)
 
@@ -16,3 +31,4 @@ app.register_blueprint(notice)
 def welcome():
     return '<h1 align="center">Successfully Running</h1>'
 
+# app.run()
