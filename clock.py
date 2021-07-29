@@ -1,18 +1,20 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 from fcm.fcm import prepareData
 
-sched = BlockingScheduler()
+scheduler = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', seconds=5)
+# Visit https://devcenter.heroku.com/articles/clock-processes-python
+# to know more
+@scheduler.scheduled_job('interval', minutes=1)
 def timed_job():
     prepareData()
     print('This job is run every three minutes.')
 
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
-def scheduled_job():
-    print('This job is run every weekday at 5pm.')
+# @scheduler.scheduled_job('cron', day_of_week='mon-fri', hour=17)
+# def scheduled_job():
+#     print('This job is run every weekday at 5pm.')
 
 
-sched.start()
+scheduler.start()

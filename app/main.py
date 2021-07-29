@@ -1,13 +1,19 @@
 import os
 import sys
-from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from notice.notice import notice
-from fcm.fcm import prepareData
+# from apscheduler.schedulers.background import BackgroundScheduler
+# from fcm.fcm import prepareData
 from dotenv import load_dotenv
-
 load_dotenv()
 
+
+# Visit https://stackoverflow.com/questions/21214270/how-to-schedule-a-function-to-run-every-hour-on-flask
+# to know more
+
+
+# Comment line 49-59 and
+# Uncomment line 5,6 & 17-44 to run this project in local pc
 # For Server
 # sys.path.insert(0, os.getcwd() + '/apis')
 #
@@ -27,7 +33,7 @@ load_dotenv()
 #
 #
 # app = MyFlaskApp(__name__)
-
+#
 #
 # app.register_blueprint(notice)
 #
@@ -37,7 +43,8 @@ load_dotenv()
 #     return '<h1 align="center">Successfully Running</h1>'
 #
 
-
+# Comment line 5,6 & 17-44 also
+# Uncomment line 49-59 to run this project in heroku
 # For Server
 sys.path.insert(0, os.getcwd() + '/apis')
 

@@ -13,11 +13,6 @@ eventsURL = os.environ.get('EVENT_URL', '')
 notice = Blueprint('notice', __name__)
 
 
-# Shut down the scheduler when exiting the app
-# atexit.register(lambda: scheduler.shutdown())
-# http://127.0.0.1:5000/ bubt/v1/allNotice?sl=0&&el=520 page=3&per_page=100
-
-
 def getAllNE(dType, page, limit):
     finalData = {
         'data': list()
