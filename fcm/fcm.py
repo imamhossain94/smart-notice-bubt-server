@@ -56,7 +56,7 @@ def localData(objData, filename):
 
 def prepareData():
     noticeData = getAllNE(dType='notice', page=0, limit=1)
-
+    print("hit push notification")
     sendPushNotification(nType='notice', data=noticeData)
 
     # if localData(objData=noticeData, filename=noticeFile):
