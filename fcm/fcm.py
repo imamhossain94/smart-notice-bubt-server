@@ -57,14 +57,16 @@ def localData(objData, filename):
 def prepareData():
     noticeData = getAllNE(dType='notice', page=0, limit=1)
 
-    if localData(objData=noticeData, filename=noticeFile):
-        sendPushNotification(nType='notice', data=noticeData)
-    else:
-        print("No New Notification")
+    sendPushNotification(nType='notice', data=noticeData)
 
-    eventData = getAllNE(dType='event', page=0, limit=1)
-    if localData(objData=eventData, filename=eventFile):
-        sendPushNotification(nType='event', data=eventData)
-    else:
-        print("No New Event")
+    # if localData(objData=noticeData, filename=noticeFile):
+    #     sendPushNotification(nType='notice', data=noticeData)
+    # else:
+    #     print("No New Notification")
+    #
+    # eventData = getAllNE(dType='event', page=0, limit=1)
+    # if localData(objData=eventData, filename=eventFile):
+    #     sendPushNotification(nType='event', data=eventData)
+    # else:
+    #     print("No New Event")
 
