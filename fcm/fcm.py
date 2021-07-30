@@ -1,4 +1,5 @@
 import json
+import time
 import os.path
 from io import BytesIO
 import firebase_admin
@@ -19,7 +20,8 @@ firebase_admin.initialize_app(cred, {
 baseDirectory = 'resources'
 noticeFile = baseDirectory + '/latestNotice.json'
 eventFile = baseDirectory + '/latestEvent.json'
-imageFile = baseDirectory + '/photo.jpg'
+noticeImageFile = baseDirectory + '/noticePhoto.jpg'
+eventImageFile = baseDirectory + '/eventPhoto.jpg'
 
 # Cloud messaging instance
 serverToken = os.environ.get('FCM_SERVER_TOKEN', '')
@@ -34,12 +36,12 @@ headers = {
 
 
 # Upload file in firebase storage
-def upload_blob():
+def upload_blob(iType):
     bucket = storage.bucket()
     # File will be save in storage with this name
-    blob = bucket.blob('image.jpg')
+    blob = bucket.blob('noticeImage' if iType == 'notice' else 'eventImage')
     # Browse file to upload
-    blob.upload_from_filename(imageFile)
+    blob.upload_from_filename(noticeImageFile if iType == 'notice' else eventImageFile)
     # Making file url public
     blob.make_public()
     # Getting file url and retuning
@@ -56,12 +58,15 @@ def sendPushNotification(nType, data):
         # Download image from url
         response = requests.get(imageUrl)
         img = Image.open(BytesIO(response.content))
-        # Resize image url 1000px * 500px to reduce image size under 1MB
-        img = img.resize((1000, 500), Image.ANTIALIAS)
+        x, y = img.size
+        y = int(y / int(str(x)[0]))
+        x = int(x / int(str(x)[0]))
+        # Resize image url to reduce image size under 1MB
+        img = img.resize((x, y), Image.ANTIALIAS)
         # Save image in file
-        img.save(imageFile, 'JPEG')
+        img.save(noticeImageFile if nType == 'notice' else eventImageFile, 'JPEG')
         # Upload image into firebase storage and get image url
-        imageUrl = upload_blob()
+        imageUrl = upload_blob(iType=nType)
 
     # if imageUrl is null then we will send title and body.
     notification = {
@@ -118,6 +123,8 @@ def prepareData():
         sendPushNotification(nType='notice', data=noticeData)
     else:
         print("No New Notification")
+
+    time.sleep(5)
 
     # get last event scraped data
     eventData = getAllNE(dType='event', page=0, limit=1)

@@ -82,7 +82,7 @@ def getDetails(url):
     return finalData
 
 
-# Main route 
+# Main route
 @notice.route('/bubt/v1/<dataType>', methods=['GET'])
 def dataBUBT(dataType):
     print(request.args)
