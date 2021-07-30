@@ -119,7 +119,7 @@ def prepareData():
     # get last notice scraped data
     noticeData = getAllNE(dType='notice', page=1, limit=1)
     # check this data was send as notification or not
-    if localData(objData=noticeData, filename=noticeFile):
+    if not localData(objData=noticeData, filename=noticeFile):
         sendPushNotification(nType='notice', data=noticeData)
     else:
         print("No New Notification")
@@ -129,7 +129,7 @@ def prepareData():
     # get last event scraped data
     eventData = getAllNE(dType='event', page=0, limit=1)
     # check this data was send as notification or not
-    if localData(objData=eventData, filename=eventFile):
+    if not localData(objData=eventData, filename=eventFile):
         sendPushNotification(nType='event', data=eventData)
     else:
         print("No New Event")
