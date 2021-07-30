@@ -118,18 +118,19 @@ def localData(objData, filename):
 def prepareData():
     # get last notice scraped data
     noticeData = getAllNE(dType='notice', page=1, limit=1)
+    sendPushNotification(nType='notice', data=noticeData)
     # check this data was send as notification or not
-    if not localData(objData=noticeData, filename=noticeFile):
-        sendPushNotification(nType='notice', data=noticeData)
-    else:
-        print("No New Notification")
-
-    time.sleep(5)
-
-    # get last event scraped data
-    eventData = getAllNE(dType='event', page=0, limit=1)
-    # check this data was send as notification or not
-    if not localData(objData=eventData, filename=eventFile):
-        sendPushNotification(nType='event', data=eventData)
-    else:
-        print("No New Event")
+    # if localData(objData=noticeData, filename=noticeFile):
+    #     sendPushNotification(nType='notice', data=noticeData)
+    # else:
+    #     print("No New Notification")
+    #
+    # time.sleep(5)
+    #
+    # # get last event scraped data
+    # eventData = getAllNE(dType='event', page=0, limit=1)
+    # # check this data was send as notification or not
+    # if localData(objData=eventData, filename=eventFile):
+    #     sendPushNotification(nType='event', data=eventData)
+    # else:
+    #     print("No New Event")
