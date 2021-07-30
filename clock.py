@@ -6,7 +6,7 @@ scheduler = BlockingScheduler()
 
 # Visit https://devcenter.heroku.com/articles/clock-processes-python
 # to know more
-@scheduler.scheduled_job('interval', minutes=1)
+@scheduler.scheduled_job('interval', minutes=15)
 def timed_job():
     prepareData()
     print('This job is run every three minutes.')
