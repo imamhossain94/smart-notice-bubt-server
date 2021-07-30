@@ -10,9 +10,11 @@ baseURL = os.environ.get('BASE_URL', '')
 noticesURL = os.environ.get('NOTICE_URL', '')
 eventsURL = os.environ.get('EVENT_URL', '')
 
+# Apps Blueprint
 notice = Blueprint('notice', __name__)
 
 
+# Scraped Notice or Event
 def getAllNE(dType, page, limit):
     finalData = {
         'data': list()
@@ -54,6 +56,7 @@ def getAllNE(dType, page, limit):
     return finalData
 
 
+# Get scrapped notice in detailed
 def getDetails(url):
     finalData = {
         'data': dict()
@@ -79,6 +82,7 @@ def getDetails(url):
     return finalData
 
 
+# Main route 
 @notice.route('/bubt/v1/<dataType>', methods=['GET'])
 def dataBUBT(dataType):
     print(request.args)

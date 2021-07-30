@@ -36,10 +36,13 @@ headers = {
 # Upload file in firebase storage
 def upload_blob():
     bucket = storage.bucket()
+    # File will be save in storage with this name
     blob = bucket.blob('image.jpg')
-    outfile = imageFile
-    blob.upload_from_filename(outfile)
+    # Browse file to upload
+    blob.upload_from_filename(imageFile)
+    # Making file url public
     blob.make_public()
+    # Getting file url and retuning
     return blob.public_url
 
 
@@ -85,11 +88,17 @@ def sendPushNotification(nType, data):
         f.write(json.dumps(data))
 
 
+# Checking directory are exists or not
+# If exists read file inside of it and compare
+# newly scraped data with file data
+# If data are matched it return false otherwise return true
 def localData(objData, filename):
+    # Checking that the directory are exists or not
     dir_exists = os.path.exists(baseDirectory)
     file_exists = os.path.exists(filename)
 
     if not dir_exists:
+        # Making directory
         os.makedirs(baseDirectory)
     if file_exists:
         with open(filename, 'r') as f:
@@ -99,17 +108,20 @@ def localData(objData, filename):
     return True if objData != data else False
 
 
+# Get scraped data and check if those data ware send
+# as notification or not.
 def prepareData():
+    # get last notice scraped data
     noticeData = getAllNE(dType='notice', page=1, limit=1)
-    # print("hit push notification")
-    # sendPushNotification(nType='notice', data=noticeData)
-
+    # check this data was send as notification or not
     if localData(objData=noticeData, filename=noticeFile):
         sendPushNotification(nType='notice', data=noticeData)
     else:
         print("No New Notification")
 
+    # get last event scraped data
     eventData = getAllNE(dType='event', page=0, limit=1)
+    # check this data was send as notification or not
     if localData(objData=eventData, filename=eventFile):
         sendPushNotification(nType='event', data=eventData)
     else:
