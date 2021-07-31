@@ -21,7 +21,7 @@ load_dotenv()
 #
 # def timed_job():
 #     scheduler = BackgroundScheduler()
-#     scheduler.add_job(func=prepareData, trigger="interval", seconds=20)
+#     scheduler.add_job(func=prepareData, trigger="interval", seconds=5)
 #     scheduler.start()
 #
 #
@@ -38,7 +38,7 @@ load_dotenv()
 #
 # app = MyFlaskApp(__name__)
 # app.register_blueprint(notice)
-#
+
 #
 # @app.route('/')
 # def welcome():

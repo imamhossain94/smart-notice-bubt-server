@@ -106,7 +106,7 @@ def prepareData():
     else:
         print("No New Notification")
 
-    time.sleep(20)
+    time.sleep(5)
 
     # get last event scraped data
     eventData = getAllNE(dType='event', page=0, limit=1)

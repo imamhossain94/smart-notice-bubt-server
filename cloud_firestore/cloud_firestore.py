@@ -14,7 +14,7 @@ firebase_admin.initialize_app(cred, {'storageBucket': 'smart-notice-bubt.appspot
 db = firestore.client()
 
 # Collection name
-noticeRef = db.collection('events')
+noticeRef = db.collection('notice')
 eventsRef = db.collection('events')
 
 
