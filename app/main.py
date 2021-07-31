@@ -4,6 +4,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from fcm.fcm import prepareData
 from notice.notice import notice
+from cloud_firestore.cloud_firestore import uploadDocIfNotExist
 
 # Load .env file
 from dotenv import load_dotenv
@@ -18,7 +19,7 @@ load_dotenv()
 # sys.path.insert(0, os.getcwd() + '/apis')
 #
 #
-# def do_something():
+# def timed_job():
 #     scheduler = BackgroundScheduler()
 #     scheduler.add_job(func=prepareData, trigger="interval", seconds=20)
 #     scheduler.start()
@@ -28,7 +29,10 @@ load_dotenv()
 #     def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
 #         if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
 #             with self.app_context():
-#                 do_something()
+#                 # Upload all notice and events if they are not exit into the database
+#                 uploadDocIfNotExist()
+#                 timed_job()
+#
 #         super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
 #
 #

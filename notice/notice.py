@@ -37,19 +37,24 @@ def getAllNE(dType, page, limit):
 
         for row in rows[int(start): int(end)]:
             cols = row.find_all('td')
-            details = getDetails(cols[0].a['href'].strip())
+            detailUrl = cols[0].a['href'].strip()
+            details = getDetails(detailUrl)
+
             localData = {
+                'id': int(detailUrl.split("/")[-1]),
                 'title': cols[0].text.strip(),
                 'published_on': cols[2 if dType == 'notice' else 1].text.strip(),
                 'url': cols[0].a['href'].strip(),
                 'details': details.get('data'),
             }
+
             if dType == 'notice':
                 localData['category'] = cols[1].text.strip()
             else:
                 localData['category'] = "Event"
             finalData['data'].append(localData)
         finalData['status'] = 'success'
+        finalData['type'] = dType
     except Exception as e:
         finalData = {'status': 'failed', 'reason': str(e)}
 

@@ -2,19 +2,10 @@ import json
 import time
 import os.path
 from io import BytesIO
-import firebase_admin
 import requests
 from PIL import Image
-from firebase_admin import credentials, storage
-from notice.notice import *
-
-# Auth google admin sdk
-cred = credentials.Certificate('key.json')
-
-# Initialize firebase app with storage bucket
-firebase_admin.initialize_app(cred, {
-    'storageBucket': 'smart-notice-bubt.appspot.com'
-})
+from notice.notice import getAllNE
+from cloud_firestore.cloud_firestore import uploadFile, uploadDocuments
 
 # Directory information
 baseDirectory = 'resources'
@@ -35,24 +26,10 @@ headers = {
 }
 
 
-# Upload file in firebase storage
-def upload_blob(iType):
-    bucket = storage.bucket()
-    # File will be save in storage with this name
-    blob = bucket.blob('noticeImage' if iType == 'notice' else 'eventImage')
-    # Browse file to upload
-    blob.upload_from_filename(noticeImageFile if iType == 'notice' else eventImageFile)
-    # Making file url public
-    blob.make_public()
-    # Getting file url and retuning
-    return blob.public_url
-
-
 # Create push notification payload an send.
-def sendPushNotification(nType, data):
+def sendPushNotification(data):
     # get image url
     imageUrl = data['data'][0]['details']['images']
-
     # checking if image url is not null
     if imageUrl:
         # Download image from url
@@ -64,9 +41,10 @@ def sendPushNotification(nType, data):
         # Resize image url to reduce image size under 1MB
         img = img.resize((x, y), Image.ANTIALIAS)
         # Save image in file
-        img.save(noticeImageFile if nType == 'notice' else eventImageFile, 'JPEG')
+        imageFileName = noticeImageFile if data['type'] == 'notice' else eventImageFile
+        img.save(imageFileName)
         # Upload image into firebase storage and get image url
-        imageUrl = upload_blob(iType=nType)
+        imageUrl = uploadFile(filename=imageFileName)
 
     # if imageUrl is null then we will send title and body.
     notification = {
@@ -88,8 +66,12 @@ def sendPushNotification(nType, data):
     # Sending notification
     requests.post("https://fcm.googleapis.com/fcm/send", headers=headers, data=json.dumps(body))
 
+    # Uploading data in firebase storage
+    uploadDocuments(data=data)
+
     # Saving last send notification data
-    with open(noticeFile if nType == 'notice' else eventFile, 'w+') as f:
+    dataFileName = noticeFile if data['type'] == 'notice' else eventFile
+    with open(dataFileName, 'w+') as f:
         f.write(json.dumps(data))
 
 
@@ -117,20 +99,19 @@ def localData(objData, filename):
 # as notification or not.
 def prepareData():
     # get last notice scraped data
-    noticeData = getAllNE(dType='notice', page=1, limit=1)
-    sendPushNotification(nType='notice', data=noticeData)
+    noticeData = getAllNE(dType='notice', page=0, limit=1)
     # check this data was send as notification or not
-    # if localData(objData=noticeData, filename=noticeFile):
-    #     sendPushNotification(nType='notice', data=noticeData)
-    # else:
-    #     print("No New Notification")
-    #
-    # time.sleep(5)
-    #
-    # # get last event scraped data
-    # eventData = getAllNE(dType='event', page=0, limit=1)
-    # # check this data was send as notification or not
-    # if localData(objData=eventData, filename=eventFile):
-    #     sendPushNotification(nType='event', data=eventData)
-    # else:
-    #     print("No New Event")
+    if localData(objData=noticeData, filename=noticeFile):
+        sendPushNotification(data=noticeData)
+    else:
+        print("No New Notification")
+
+    time.sleep(20)
+
+    # get last event scraped data
+    eventData = getAllNE(dType='event', page=0, limit=1)
+    # check this data was send as notification or not
+    if localData(objData=eventData, filename=eventFile):
+        sendPushNotification(data=eventData)
+    else:
+        print("No New Event")
