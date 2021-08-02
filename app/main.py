@@ -38,12 +38,12 @@ load_dotenv()
 #
 # app = MyFlaskApp(__name__)
 # app.register_blueprint(notice)
-
+#
 #
 # @app.route('/')
 # def welcome():
 #     return '<h1 align="center">Successfully Running</h1>'
-
+#
 # Code fore heroku
 # For Server
 sys.path.insert(0, os.getcwd() + '/apis')
