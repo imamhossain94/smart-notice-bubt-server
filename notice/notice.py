@@ -88,7 +88,7 @@ def getDetails(url):
 
 
 # Main route
-@notice.route('/bubt/v1/<dataType>', methods=['GET'])
+@notice.route('/bubt/v2/<dataType>', methods=['GET'])
 def dataBUBT(dataType):
     print(request.args)
     if dataType in ['allNotice', 'noticeDetails', 'allEvent', 'eventDetails']:
