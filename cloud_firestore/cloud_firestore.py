@@ -10,12 +10,29 @@ cred = credentials.Certificate('key.json')
 # Initialize firebase app with storage bucket
 firebase_admin.initialize_app(cred, {'storageBucket': 'smart-notice-bubt.appspot.com'})
 
-
 db = firestore.client()
 
 # Collection name
 noticeRef = db.collection('notice')
 eventsRef = db.collection('events')
+
+
+def checkNotificationExistence(data):
+    try:
+        docRef = noticeRef.document(str(data['data'][0]['id'])).get()
+        return True if docRef.exists else False
+    except Exception as e:
+        print("Error Checking Documents: " + str(e))
+        return False
+
+
+def checkEventExistence(data):
+    try:
+        docRef = eventsRef.document(str(data['data'][0]['id'])).get()
+        return True if docRef.exists else False
+    except Exception as e:
+        print("Error Checking Documents: " + str(e))
+        return False
 
 
 def uploadDocuments(data):

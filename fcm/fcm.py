@@ -5,12 +5,10 @@ from io import BytesIO
 import requests
 from PIL import Image
 from notice.notice import getAllNE
-from cloud_firestore.cloud_firestore import uploadFile, uploadDocuments
+from cloud_firestore.cloud_firestore import uploadFile, uploadDocuments, checkNotificationExistence, checkEventExistence
 
 # Directory information
 baseDirectory = 'resources'
-noticeFile = baseDirectory + '/latestNotice.json'
-eventFile = baseDirectory + '/latestEvent.json'
 noticeImageFile = baseDirectory + '/noticePhoto.jpg'
 eventImageFile = baseDirectory + '/eventPhoto.jpg'
 
@@ -69,49 +67,33 @@ def sendPushNotification(data):
     # Uploading data in firebase storage
     uploadDocuments(data=data)
 
-    # Saving last send notification data
-    dataFileName = noticeFile if data['type'] == 'notice' else eventFile
-    with open(dataFileName, 'w+') as f:
-        f.write(json.dumps(data))
 
-
-# Checking directory are exists or not
-# If exists read file inside of it and compare
-# newly scraped data with file data
-# If data are matched it return false otherwise return true
-def localData(objData, filename):
+# Checking directory exists or not
+def createLocalDir():
     # Checking that the directory are exists or not
     dir_exists = os.path.exists(baseDirectory)
-    file_exists = os.path.exists(filename)
-
     if not dir_exists:
         # Making directory
         os.makedirs(baseDirectory)
-    if file_exists:
-        with open(filename, 'r') as f:
-            data = json.loads(f.read())
-    else:
-        data = {}
-    return True if objData != data else False
 
 
 # Get scraped data and check if those data ware send
 # as notification or not.
 def prepareData():
+    createLocalDir()
     # get last notice scraped data
     noticeData = getAllNE(dType='notice', page=0, limit=1)
-    # check this data was send as notification or not
-    if localData(objData=noticeData, filename=noticeFile):
+    # checking that data was send as notification or not
+    if not checkNotificationExistence(noticeData):
         sendPushNotification(data=noticeData)
     else:
         print("No New Notification")
 
-    time.sleep(5)
-
+    time.sleep(20)
     # get last event scraped data
     eventData = getAllNE(dType='event', page=0, limit=1)
-    # check this data was send as notification or not
-    if localData(objData=eventData, filename=eventFile):
+    # checking that data was send as notification or not
+    if not checkEventExistence(eventData):
         sendPushNotification(data=eventData)
     else:
         print("No New Event")
