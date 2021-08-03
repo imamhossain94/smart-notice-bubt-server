@@ -41,13 +41,13 @@ def uploadFile(filename):
 
 
 def uploadDocIfNotExist():
-    # collection = noticeRef.get()
-    # if not collection:
-    #     print('Uploading Notice')
-    #     noticeData = getAllNE(dType='notice', page=0, limit=521)
-    #     uploadDocuments(data=noticeData)
-    #
-    # time.sleep(20)
+    collection = noticeRef.get()
+    if not collection:
+        print('Uploading Notice')
+        noticeData = getAllNE(dType='notice', page=0, limit=521)
+        uploadDocuments(data=noticeData)
+
+    time.sleep(20)
     collection = eventsRef.get()
     if not collection:
         print('Uploading Events')

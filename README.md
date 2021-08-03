@@ -113,8 +113,12 @@ Werkzeug==1.0.1
 ```
 
 
+## Heroku Deployment
 
-
+* add-on: <a href="https://kaffeine.herokuapp.com/">Kaffeine</a>
+* web: gunicorn wsgi:app
+* clock: python clock.py
+* sleep-time: 12:00 AM - 6:00 AM 
 
 
 ## 🧑 Author
