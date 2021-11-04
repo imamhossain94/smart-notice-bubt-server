@@ -14,14 +14,12 @@ like-
 * Scheduled app run.
 * Push notification. etc..
 
-<div align="center">
 
-[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
-[![GitHub Forks](https://img.shields.io/github/forks/saadhaxxan/Car_Game_Python_Pygame.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/imamhossain94/smart-notice-bubt-server/fork)
-[![GitHub Issues](https://img.shields.io/github/issues/saadhaxxan/Car_Game_Python_Pygame.svg?style=flat&label=Issues&maxAge=2592000)](https://github.com/imamhossain94/smart-notice-bubt-server/issues)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat&label=Contributions&colorA=red&colorB=black	)](#)
+## Three server
+* smart-notice-bubt [94]
+* smart-notice-bubt-two [95*]
+* smart-notice-bubt-three [96]
 
-</div>
 
 
 ## Library used
