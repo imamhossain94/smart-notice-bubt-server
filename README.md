@@ -17,8 +17,8 @@ like-
 
 ## Three server
 * smart-notice-bubt [94]
-* smart-notice-bubt-two [95*]
-* smart-notice-bubt-three [96]
+* smart-notice-bubt-two [95]
+* smart-notice-bubt-three [96*]
 
 
 
