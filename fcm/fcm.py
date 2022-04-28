@@ -82,18 +82,20 @@ def createLocalDir():
 def prepareData():
     createLocalDir()
     # get last notice scraped data
-    noticeData = getAllNE(dType='notice', page=0, limit=1)
+    noticeData = getAllNE(dType='notice', page=0, limit=5)
     # checking that data was send as notification or not
-    if not checkNotificationExistence(noticeData):
-        sendPushNotification(data=noticeData)
-    else:
-        print("No New Notification")
+    for nd in noticeData:
+        if not checkNotificationExistence(noticeData):
+            sendPushNotification(data=noticeData)
+        else:
+            print("No New Notification")
 
     time.sleep(20)
     # get last event scraped data
-    eventData = getAllNE(dType='event', page=0, limit=1)
+    eventData = getAllNE(dType='event', page=0, limit=5)
     # checking that data was send as notification or not
-    if not checkEventExistence(eventData):
-        sendPushNotification(data=eventData)
-    else:
-        print("No New Event")
+    for ed in eventData:
+        if not checkEventExistence(eventData):
+            sendPushNotification(data=eventData)
+        else:
+            print("No New Event")
