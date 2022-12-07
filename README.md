@@ -15,11 +15,16 @@ like-
 * Push notification. etc..
 
 
-## Three server
+## Three heroku servers no longer available
 * smart-notice-bubt [94]
 * smart-notice-bubt-two [95]
-* smart-notice-bubt-three [96*]
+* smart-notice-bubt-three [96]
 
+## Now this app is hosted on Mogenius Studio
+* INSTANCE: 1
+* CPU: 0.2 Core
+* RAM: 256 MB
+* TEMP STORAGE: 128 MB
 
 
 ## Library used
@@ -111,7 +116,7 @@ Werkzeug==1.0.1
 ```
 
 
-## Heroku Deployment
+## Heroku Deployment [Deperecated]
 
 * add-on: <a href="https://kaffeine.herokuapp.com/">Kaffeine</a>
 * web: gunicorn wsgi:app
