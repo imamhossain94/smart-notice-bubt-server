@@ -1,11 +1,26 @@
+import os
 import time
 from firebase_admin import storage, firestore
 from notice.notice import getAllNE
 import firebase_admin
 from firebase_admin import credentials
 
+firebase_credentials = {
+    "type": os.environ.get("TYPE"),
+    "project_id": os.environ.get("PROJECT_ID"),
+    "private_key_id": os.environ.get("PRIVATE_KEY_ID"),
+    "private_key": os.environ.get("PRIVATE_KEY").replace(r'\n', '\n'),
+    "client_email": os.environ.get("CLIENT_EMAIL"),
+    "client_id": os.environ.get("CLIENT_ID"),
+    "auth_uri": os.environ.get("AUTH_URI"),
+    "token_uri": os.environ.get("TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.environ.get("AUTH_PROVIDER_X509_CERT_URL"),
+    "client_x509_cert_url": os.environ.get("CLIENT_X509_CERT_URL")
+}
+
 # Auth google admin sdk
-cred = credentials.Certificate('key.json')
+cred = credentials.Certificate(firebase_credentials)
+
 
 # Initialize firebase app with storage bucket
 firebase_admin.initialize_app(cred, {'storageBucket': 'smart-notice-bubt.appspot.com'})
