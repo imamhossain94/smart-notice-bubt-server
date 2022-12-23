@@ -53,9 +53,10 @@ def checkEventExistence(data):
 def uploadDocuments(data):
     try:
         docRef = noticeRef if data['type'] == 'notice' else eventsRef
-        for item in data['data']:
-            docRef.document(str(item['id'])).set(item)
-            print("Uploaded: " + str(item['id']))
+        if 'type' in data:
+            data.pop('type')
+        docRef.document(str(data['id'])).set(data)
+        print("Uploaded: " + str(data['id']))
     except Exception as e:
         print("Error Uploading Documents: " + str(e))
 
@@ -64,7 +65,7 @@ def uploadFile(buffer, data_type):
     try:
         bucket = storage.bucket()
         blob = bucket.blob('noticeImage' if 'notice' in data_type else 'eventImage')
-        blob.upload_from_string(buffer.read(), content_type='image/jpg')
+        blob.upload_from_string(buffer.getvalue(), content_type='image/jpeg')
         blob.make_public()
         return blob.public_url
     except Exception as e:
@@ -85,3 +86,4 @@ def uploadDocIfNotExist():
         print('Uploading Events')
         eventData = getAllNE(dType='event', page=0, limit=12)
         uploadDocuments(data=eventData)
+
