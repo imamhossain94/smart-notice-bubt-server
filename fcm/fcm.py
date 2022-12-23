@@ -32,12 +32,12 @@ def sendPushNotification(data):
         y = int(y / int(str(x)[0]))
         x = int(x / int(str(x)[0]))
         # Resize image url to reduce image size under 1MB
-        img = img.resize((x, y), Image.ANTIALIAS)
+        image = img.resize((x, y), Image.ANTIALIAS)
         # Save image as BytesIO
-        img_str = BytesIO
-        img.save(img_str, 'jpg')
+        output = BytesIO()
+        image.save(output, format="JPEG", optimize=True)
         # Upload image into firebase storage and get image url
-        imageUrl = uploadFile(buffer=img_str, data_type=data['type'])
+        imageUrl = uploadFile(buffer=output, data_type=data['type'])
 
     # if imageUrl is null then we will send title and body.
     notification = {
@@ -72,6 +72,7 @@ def prepareData():
     if noticeData['status'] == 'success':
         for nd in noticeData:
             if not checkNoticeExistence(nd):
+                nd['type'] = 'notice'
                 sendPushNotification(data=nd)
             else:
                 print("No New Notification")
@@ -85,6 +86,7 @@ def prepareData():
     if eventData['status'] == 'success':
         for ed in eventData['data']:
             if not checkEventExistence(ed):
+                ed['type'] = 'event'
                 sendPushNotification(data=ed)
             else:
                 print("No New Event")

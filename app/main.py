@@ -2,7 +2,7 @@ import os
 import sys
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
-from fcm.fcm import prepareData
+from fcm.fcm import prepareData, sendPushNotification
 from notice.notice import notice
 from cloud_firestore.cloud_firestore import uploadDocIfNotExist
 
@@ -42,6 +42,18 @@ app.register_blueprint(notice)
 
 @app.route('/')
 def welcome():
+    # sendPushNotification(data={
+    #     'id': 9000,
+    #     'title': "Test Title",
+    #     'published_on': "23 Dec 2022",
+    #     'url': "https://github.com/imamhossain94",
+    #     'category': "Event",
+    #     'type': 'event',
+    #     'details': {
+    #         'description': "",
+    #         'images': "https://avatars.githubusercontent.com/u/30856007?v=4"
+    #     },
+    # })
     return '<h1 align="center">Successfully Running</h1>'
 
 # Code fore heroku
