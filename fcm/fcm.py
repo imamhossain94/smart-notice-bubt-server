@@ -5,7 +5,7 @@ from io import BytesIO
 import requests
 from PIL import Image
 from notice.notice import getAllNE
-from cloud_firestore.cloud_firestore import uploadFile, uploadDocuments, checkNotificationExistence, checkEventExistence
+from cloud_firestore.cloud_firestore import uploadFile, uploadDocuments, checkNoticeExistence, checkEventExistence
 
 # Cloud messaging instance
 serverToken = os.environ.get('FCM_SERVER_TOKEN', '')
@@ -22,7 +22,7 @@ headers = {
 # Create push notification payload an send.
 def sendPushNotification(data):
     # get image url
-    imageUrl = data['data'][0]['details']['images']
+    imageUrl = data['details']['images']
     # checking if image url is not null
     if imageUrl:
         # Download image from url
@@ -41,11 +41,11 @@ def sendPushNotification(data):
 
     # if imageUrl is null then we will send title and body.
     notification = {
-        'title': data['data'][0]['title'],
-        'body': data['data'][0]['published_on'],
+        'title': data['title'],
+        'body': data['published_on'],
     } if not imageUrl else {
-        'title': data['data'][0]['title'],
-        'body': data['data'][0]['published_on'],
+        'title': data['title'],
+        'body': data['published_on'],
         'image': imageUrl  # imageUrl
     }
 
@@ -53,7 +53,7 @@ def sendPushNotification(data):
         'notification': notification,
         'to': topic,  # topic deviceToken
         'priority': 'high',
-        'data': data['data'][0]
+        'data': data
     }
 
     # Sending notification
@@ -69,18 +69,24 @@ def prepareData():
     # get last notice scraped data
     noticeData = getAllNE(dType='notice', page=0, limit=5)
     # checking that data was send as notification or not
-    for nd in noticeData:
-        if not checkNotificationExistence(noticeData):
-            sendPushNotification(data=noticeData)
-        else:
-            print("No New Notification")
+    if noticeData['status'] == 'success':
+        for nd in noticeData:
+            if not checkNoticeExistence(nd):
+                sendPushNotification(data=nd)
+            else:
+                print("No New Notification")
+    else:
+        print(noticeData['reason'])
 
     time.sleep(20)
     # get last event scraped data
     eventData = getAllNE(dType='event', page=0, limit=5)
     # checking that data was send as notification or not
-    for ed in eventData:
-        if not checkEventExistence(eventData):
-            sendPushNotification(data=eventData)
-        else:
-            print("No New Event")
+    if eventData['status'] == 'success':
+        for ed in eventData['data']:
+            if not checkEventExistence(ed):
+                sendPushNotification(data=ed)
+            else:
+                print("No New Event")
+    else:
+        print(eventData['reason'])

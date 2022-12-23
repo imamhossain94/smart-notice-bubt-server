@@ -32,9 +32,9 @@ noticeRef = db.collection('notice')
 eventsRef = db.collection('events')
 
 
-def checkNotificationExistence(data):
+def checkNoticeExistence(data):
     try:
-        docRef = noticeRef.document(str(data['data'][0]['id'])).get()
+        docRef = noticeRef.document(str(data['id'])).get()
         return True if docRef.exists else False
     except Exception as e:
         print("Error Checking Documents: " + str(e))
@@ -43,7 +43,7 @@ def checkNotificationExistence(data):
 
 def checkEventExistence(data):
     try:
-        docRef = eventsRef.document(str(data['data'][0]['id'])).get()
+        docRef = eventsRef.document(str(data['id'])).get()
         return True if docRef.exists else False
     except Exception as e:
         print("Error Checking Documents: " + str(e))

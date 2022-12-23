@@ -21,7 +21,7 @@ sys.path.insert(0, os.getcwd() + '/apis')
 
 def timed_job():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=prepareData, trigger="interval", seconds=300)
+    scheduler.add_job(func=prepareData, trigger="interval", seconds=90)
     scheduler.start()
 
 

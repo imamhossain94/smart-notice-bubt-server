@@ -21,7 +21,7 @@ def getAllNE(dType, page, limit):
     }
     try:
         url = noticesURL if dType == 'notice' else eventsURL
-        NE_HTML = get(url).text
+        NE_HTML = get(url, timeout=30).text
         NE_HTML = BeautifulSoup(str(NE_HTML), 'html.parser').find_all('table')[0]
         rows = BeautifulSoup(str(NE_HTML), 'html.parser').find_all('tr')[1:]
 
@@ -67,7 +67,7 @@ def getDetails(url):
         'data': dict()
     }
     try:
-        noticeHTML = get(url).text
+        noticeHTML = get(url, timeout=30).text
         noticeHTML = BeautifulSoup(str(noticeHTML), 'html.parser').find('div', {'class': 'devs_history_body'})
         images = noticeHTML.find_all('img')
         if len(images) != 0:
