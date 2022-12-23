@@ -60,11 +60,11 @@ def uploadDocuments(data):
         print("Error Uploading Documents: " + str(e))
 
 
-def uploadFile(filename):
+def uploadFile(buffer, data_type):
     try:
         bucket = storage.bucket()
-        blob = bucket.blob('noticeImage' if 'notice' in filename else 'eventImage')
-        blob.upload_from_filename(filename)
+        blob = bucket.blob('noticeImage' if 'notice' in data_type else 'eventImage')
+        blob.upload_from_string(buffer.read(), content_type='image/jpg')
         blob.make_public()
         return blob.public_url
     except Exception as e:

@@ -94,7 +94,7 @@ Werkzeug==1.0.1
 ## API Example
 
 * Type: [GET] https://smart-notice-bubt.herokuapp.com/bubt/v2/allNotice?page=0&limit=1 [Deprecated]
-* Type: [GET] https://smart-notice-s-prod-bubt-q4esm9.mo6.mogenius.io//bubt/v2/allNotice?page=0&limit=1
+* Type: [GET] https://smart-notice-s-prod-bubt-q4esm9.mo6.mogenius.io/bubt/v2/allNotice?page=0&limit=1
 
 ```json
 {

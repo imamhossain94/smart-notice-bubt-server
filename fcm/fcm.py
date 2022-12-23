@@ -7,11 +7,6 @@ from PIL import Image
 from notice.notice import getAllNE
 from cloud_firestore.cloud_firestore import uploadFile, uploadDocuments, checkNotificationExistence, checkEventExistence
 
-# Directory information
-baseDirectory = 'resources'
-noticeImageFile = baseDirectory + '/noticePhoto.jpg'
-eventImageFile = baseDirectory + '/eventPhoto.jpg'
-
 # Cloud messaging instance
 serverToken = os.environ.get('FCM_SERVER_TOKEN', '')
 deviceToken = os.environ.get('FCM_DEVICE_TOKEN', '')
@@ -38,11 +33,11 @@ def sendPushNotification(data):
         x = int(x / int(str(x)[0]))
         # Resize image url to reduce image size under 1MB
         img = img.resize((x, y), Image.ANTIALIAS)
-        # Save image in file
-        imageFileName = noticeImageFile if data['type'] == 'notice' else eventImageFile
-        img.save(imageFileName)
+        # Save image as BytesIO
+        img_str = BytesIO
+        img.save(img_str, 'jpg')
         # Upload image into firebase storage and get image url
-        imageUrl = uploadFile(filename=imageFileName)
+        imageUrl = uploadFile(buffer=img_str, data_type=data['type'])
 
     # if imageUrl is null then we will send title and body.
     notification = {
@@ -68,19 +63,9 @@ def sendPushNotification(data):
     uploadDocuments(data=data)
 
 
-# Checking directory exists or not
-def createLocalDir():
-    # Checking that the directory are exists or not
-    dir_exists = os.path.exists(baseDirectory)
-    if not dir_exists:
-        # Making directory
-        os.makedirs(baseDirectory)
-
-
 # Get scraped data and check if those data ware send
 # as notification or not.
 def prepareData():
-    createLocalDir()
     # get last notice scraped data
     noticeData = getAllNE(dType='notice', page=0, limit=5)
     # checking that data was send as notification or not
