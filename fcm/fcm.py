@@ -55,6 +55,7 @@ def sendPushNotification(data):
         'priority': 'high',
         'data': data
     }
+    print(imageUrl)
 
     # Sending notification
     requests.post("https://fcm.googleapis.com/fcm/send", headers=headers, data=json.dumps(body))
