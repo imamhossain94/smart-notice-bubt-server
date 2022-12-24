@@ -1,7 +1,7 @@
 import os
 from bs4 import BeautifulSoup
 from flask import Blueprint, request, jsonify
-from requests import get
+from requests import get, compat
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -71,7 +71,7 @@ def getDetails(url):
         noticeHTML = BeautifulSoup(str(noticeHTML), 'html.parser').find('div', {'class': 'devs_history_body'})
         images = noticeHTML.find_all('img')
         if len(images) != 0:
-            imageUrl = baseURL + images[0]['src']
+            imageUrl = compat.urljoin(baseURL, images[0]['src'])
         else:
             imageUrl = ''
 

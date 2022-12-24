@@ -70,12 +70,12 @@ def prepareData():
     noticeData = getAllNE(dType='notice', page=0, limit=5)
     # checking that data was send as notification or not
     if noticeData['status'] == 'success':
-        for nd in noticeData:
+        for nd in noticeData['data']:
             if not checkNoticeExistence(nd):
                 nd['type'] = 'notice'
                 sendPushNotification(data=nd)
             else:
-                print("No New Notification")
+                print("No New Notice")
     else:
         print(noticeData['reason'])
 

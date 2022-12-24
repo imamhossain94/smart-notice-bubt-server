@@ -37,7 +37,7 @@ def checkNoticeExistence(data):
         docRef = noticeRef.document(str(data['id'])).get()
         return True if docRef.exists else False
     except Exception as e:
-        print("Error Checking Documents: " + str(e))
+        print("Error Checking Documents (Notice): " + str(e))
         return False
 
 
@@ -46,7 +46,7 @@ def checkEventExistence(data):
         docRef = eventsRef.document(str(data['id'])).get()
         return True if docRef.exists else False
     except Exception as e:
-        print("Error Checking Documents: " + str(e))
+        print("Error Checking Documents (Events): " + str(e))
         return False
 
 
@@ -56,7 +56,7 @@ def uploadDocuments(data):
         if 'type' in data:
             data.pop('type')
         docRef.document(str(data['id'])).set(data)
-        print("Uploaded: " + str(data['id']))
+        print(data['type'] + " uploaded: " + str(data['id']))
     except Exception as e:
         print("Error Uploading Documents: " + str(e))
 
