@@ -56,7 +56,7 @@ def uploadDocuments(data):
         if 'type' in data:
             data.pop('type')
         docRef.document(str(data['id'])).set(data)
-        print(data['type'] + " uploaded: " + str(data['id']))
+        print("Document Uploaded: " + str(data['id']))
     except Exception as e:
         print("Error Uploading Documents: " + str(e))
 
