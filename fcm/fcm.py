@@ -33,8 +33,10 @@ def sendPushNotification(data):
         x = int(x / int(str(x)[0]))
         # Resize image url to reduce image size under 1MB
         image = img.resize((x, y), Image.ANTIALIAS)
+        image = image.convert('RGB')
         # Save image as BytesIO
         output = BytesIO()
+
         image.save(output, format="JPEG", optimize=True)
         # Upload image into firebase storage and get image url
         imageUrl = uploadFile(buffer=output, data_type=data['type'])
@@ -68,7 +70,7 @@ def sendPushNotification(data):
 # as notification or not.
 def prepareData():
     # get last notice scraped data
-    noticeData = getAllNE(dType='notice', page=0, limit=1)
+    noticeData = getAllNE(dType='notice', page=0, limit=3)
     # checking that data was send as notification or not
     if noticeData['status'] == 'success':
         for nd in noticeData['data']:
@@ -82,7 +84,7 @@ def prepareData():
 
     time.sleep(20)
     # get last event scraped data
-    eventData = getAllNE(dType='event', page=0, limit=1)
+    eventData = getAllNE(dType='event', page=0, limit=3)
     # checking that data was send as notification or not
     if eventData['status'] == 'success':
         for ed in eventData['data']:

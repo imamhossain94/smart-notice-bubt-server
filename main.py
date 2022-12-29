@@ -36,7 +36,8 @@ class MyFlaskApp(Flask):
         super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
 
 
-app = MyFlaskApp(__name__)
+# app = MyFlaskApp(__name__)
+app = Flask(__name__)
 app.register_blueprint(notice)
 
 
@@ -54,6 +55,7 @@ def welcome():
     #         'images': "https://avatars.githubusercontent.com/u/30856007?v=4"
     #     },
     # })
+    prepareData()
     return '<h1 align="center">Successfully Running</h1>'
 
 # Code fore heroku
