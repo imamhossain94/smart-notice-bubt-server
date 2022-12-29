@@ -15,11 +15,9 @@ like-
 * Push notification. etc..
 
 
-## Now this app is hosted on Mogenius Studio
-* INSTANCE: 1
-* CPU: 0.2 Core
-* RAM: 256 MB
-* TEMP STORAGE: 128 MB
+## Now this app is hosted on Render
+* Pricing Plan: <a href="https://render.com/pricing-jan-1-2023">Individual</a>
+
 
 
 ## Library used

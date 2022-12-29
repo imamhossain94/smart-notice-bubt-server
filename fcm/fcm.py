@@ -70,7 +70,7 @@ def sendPushNotification(data):
 # as notification or not.
 def prepareData():
     # get last notice scraped data
-    noticeData = getAllNE(dType='notice', page=0, limit=3)
+    noticeData = getAllNE(dType='notice', page=0, limit=1)
     # checking that data was send as notification or not
     if noticeData['status'] == 'success':
         for nd in noticeData['data']:
@@ -84,7 +84,7 @@ def prepareData():
 
     time.sleep(20)
     # get last event scraped data
-    eventData = getAllNE(dType='event', page=0, limit=3)
+    eventData = getAllNE(dType='event', page=0, limit=1)
     # checking that data was send as notification or not
     if eventData['status'] == 'success':
         for ed in eventData['data']:
