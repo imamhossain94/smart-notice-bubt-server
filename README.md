@@ -15,11 +15,6 @@ like-
 * Push notification. etc..
 
 
-## Three heroku servers no longer available
-* smart-notice-bubt [94]
-* smart-notice-bubt-two [95]
-* smart-notice-bubt-three [96]
-
 ## Now this app is hosted on Mogenius Studio
 * INSTANCE: 1
 * CPU: 0.2 Core
@@ -31,70 +26,59 @@ like-
 
 requirements.txt
 ```
-appdirs==1.4.4
-APScheduler==3.7.0
-beautifulsoup4==4.9.3
-bs4==0.0.1
-CacheControl==0.12.6
-cachetools==4.2.2
-certifi==2021.5.30
-cffi==1.14.6
-chardet==4.0.0
-charset-normalizer==2.0.3
-click==7.1.2
+APScheduler==3.9.1
+beautifulsoup4==4.11.1
+CacheControl==0.12.11
+cachetools==5.0.0
+certifi==2021.10.8
+charset-normalizer==2.0.12
+click==8.1.3
 colorama==0.4.4
-distlib==0.3.2
-filelock==3.0.12
-firebase-admin==5.0.1
-Flask==1.1.2
-google-api-core==1.31.1
-google-api-python-client==2.15.0
-google-auth==1.34.0
+firebase-admin==5.2.0
+Flask==2.1.2
+google-api-core==2.7.2
+google-api-python-client==2.46.0
+google-auth==2.6.6
 google-auth-httplib2==0.1.0
-google-cloud-core==1.7.2
-google-cloud-firestore==2.2.0
-google-cloud-storage==1.41.1
-google-crc32c==1.1.2
-google-resumable-media==1.3.2
-googleapis-common-protos==1.53.0
-grpcio==1.39.0
-gunicorn==20.0.4
-httplib2==0.19.1
-idna==2.10
-imgkit==1.0.2
-itsdangerous==2.0.1
-Jinja2==2.11.3
-MarkupSafe==1.1.1
-msgpack==1.0.2
-numpy==1.20.1
-packaging==21.0
-Pillow==8.3.1
-proto-plus==1.19.0
-protobuf==3.17.3
+google-cloud-core==2.3.0
+google-cloud-firestore==2.4.0
+google-cloud-storage==2.3.0
+google-crc32c==1.3.0
+google-resumable-media==2.3.2
+googleapis-common-protos==1.56.0
+grpcio==1.44.0
+grpcio-status==1.44.0
+httplib2==0.20.4
+idna==3.3
+itsdangerous==2.1.2
+Jinja2==3.1.2
+MarkupSafe==2.1.1
+msgpack==1.0.3
+Pillow==9.1.0
+proto-plus==1.20.3
+protobuf==3.20.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-pycparser==2.20
-pyparsing==2.4.7
-python-dotenv==0.19.0
-pytz==2021.1
-requests==2.25.1
-rsa==4.7.2
-six==1.15.0
-soupsieve==2.2.1
-tabula==1.0.5
-tzlocal==2.1
-uritemplate==3.0.1
-urllib3==1.26.3
-virtualenv==20.4.2
-Werkzeug==1.0.1
-
+pyparsing==3.0.8
+python-dotenv==0.20.0
+pytz==2022.1
+pytz-deprecation-shim==0.1.0.post0
+requests==2.27.1
+rsa==4.8
+six==1.16.0
+soupsieve==2.3.2.post1
+tzdata==2022.1
+tzlocal==4.2
+uritemplate==4.1.1
+urllib3==1.26.9
+Werkzeug==2.1.2
+gunicorn==20.1.0
 ```
 
 
 ## API Example
 
-* Type: [GET] https://smart-notice-bubt.herokuapp.com/bubt/v2/allNotice?page=0&limit=1 [Deprecated]
-* Type: [GET] https://smart-notice-s-prod-bubt-q4esm9.mo6.mogenius.io/bubt/v2/allNotice?page=0&limit=1
+* Type: [GET] https://bubt.onrender.com/bubt/v2/allNotice?page=0&limit=1
 
 ```json
 {
@@ -115,14 +99,6 @@ Werkzeug==1.0.1
   "type": "notice"
 }
 ```
-
-
-## Heroku Deployment [Deperecated]
-
-* add-on: <a href="https://kaffeine.herokuapp.com/">Kaffeine</a>
-* web: gunicorn wsgi:app
-* clock: python clock.py
-* sleep-time: 12:00 AM - 6:00 AM 
 
 
 ## 🧑 Author
